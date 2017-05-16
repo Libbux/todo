@@ -1,0 +1,12 @@
+.List {
+    width: 100%;
+    padding: 0;
+}
+
+.List-add {
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #EEE;
+    border-radius: 2px;
+    padding: 5px 10px 5px 10px;
+}
