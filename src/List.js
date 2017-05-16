@@ -13,6 +13,7 @@ class List extends Component {
     handleContentChange(id, content) {
         const newList = this.state.list.slice();
         newList[id].content = content;
+
         this.setState({list: newList});
     }
 
@@ -34,6 +35,11 @@ class List extends Component {
         });
     }
 
+    save(id) {
+        // TODO: save state to backend
+        console.log(this.state.list[id]);
+    }
+
     render () {
         const listItems = this.state.list.map((item) =>
             <Item
@@ -43,6 +49,7 @@ class List extends Component {
                 done={item.done}
                 onContentChange={(id, content) => this.handleContentChange(id, content)}
                 onDoneChange={(id) => this.handleDoneChange(id)}
+                onBlur={(id) => this.save(id)}
             />
         );
 

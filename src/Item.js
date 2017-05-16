@@ -10,6 +10,10 @@ class Item extends Component {
         this.props.onContentChange(this.props.itemId, event.target.value);
     }
 
+    handleBlur() {
+        this.props.onBlur(this.props.itemId)
+    }
+
     render () {
         const checked = this.props.done ? true : false
         return (
@@ -20,6 +24,7 @@ class Item extends Component {
                 <input type="text"
                     value={this.props.content}
                     onChange={(event) => this.handleChange(event)}
+                    onBlur={() => this.handleBlur()}
                 />
             </div>
         )
