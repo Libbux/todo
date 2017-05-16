@@ -1,55 +1,95 @@
 import React, { Component } from 'react';
 import './List.css';
 import Item from './Item.js';
+const axios = require('axios');
+const url = 'http://localhost:3001/api';
 
 class List extends Component {
     constructor() {
         super();
+        var items = this.apiGetItems();
+        console.log(items);
         this.state = {
             list: [],
         };
     }
 
-    handleContentChange(id, content) {
-        const newList = this.state.list.slice();
-        newList[id].content = content;
+    findIndex(id) {
+        return this.state.list.indexOf(this.state.list.find((item) => {
+            return id === item._id
+        }));
+    }
 
+    findItem(id) {
+        return this.state.list[this.findIndex(id)];
+    }
+
+    apiGetItems() {
+        axios.get(url + '/items').then((response) => {
+            this.setState({
+                list: response.data,
+            });
+        });
+    };
+
+    apiCreateItem() {
+        return axios.post(url + '/items', {
+            done: false,
+            content: '',
+        });
+    };
+
+    apiUpdateItem(id, done, content) {
+        axios.put(url + '/items/' + id, {
+            done: done,
+            content: content,
+        }).then((response) => {
+            console.log(response);
+        });
+    }
+
+    handleContentChange(id, content) {
+        var newList = this.state.list.slice();
+        newList[this.findIndex(id)].content = content;
         this.setState({list: newList});
     }
 
     handleDoneChange(id) {
-        const newList = this.state.list.slice();
-        newList[id].done = !this.state.list[id].done;
+        var newList = this.state.list.slice();
+        newList[this.findIndex(id)].done = !this.state.list[this.findIndex(id)].done;
         this.setState({list: newList});
+        this.saveItem(id);
     }
 
     addItem() {
-        this.setState({
-            list: this.state.list.concat(
-                {
-                    id: this.state.list.length,
-                    content: '',
-                    done: false,
-                }
-            ),
+        this.apiCreateItem().then((response) => {
+            this.setState({
+                list: this.state.list.concat(
+                    {
+                        _id: response.data._id,
+                        content: '',
+                        done: false,
+                    }
+                ),
+            });
         });
     }
 
-    save(id) {
-        // TODO: save state to backend
-        console.log(this.state.list[id]);
+    saveItem(id) {
+        var item = this.findItem(id);
+        this.apiUpdateItem(id, item.done, item.content);
     }
 
     render () {
-        const listItems = this.state.list.map((item) =>
+        var listItems = this.state.list.map((item, index) =>
             <Item
-                key={item.id}
-                itemId={item.id}
+                key={index}
+                itemId={item._id}
                 content={item.content}
                 done={item.done}
                 onContentChange={(id, content) => this.handleContentChange(id, content)}
                 onDoneChange={(id) => this.handleDoneChange(id)}
-                onBlur={(id) => this.save(id)}
+                onBlur={(id) => this.saveItem(id)}
             />
         );
 
