@@ -6,13 +6,23 @@
 
 .Item-checkbox {
     display: inline-block;
+    cursor: pointer;
     width: 50px;
+}
+
+.Item-checkbox input[type=checkbox] {
+    -webkit-transform: scale(1.25);
 }
 
 .Item input {
     font-size: 1.5em;
     font-weight: 100;
     width: 70%;
+}
+
+.Item-delete {
+    cursor: pointer;
+    color: #AAA;
 }
 
 /* Quick input style reset used without license from https://gist.github.com/anthonyshort/552543 */

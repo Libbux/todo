@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Item.css';
 
 class Item extends Component {
-    handleClick() {
+    handleDone() {
         this.props.onDoneChange(this.props.itemId);
     }
 
@@ -14,18 +14,25 @@ class Item extends Component {
         this.props.onBlur(this.props.itemId)
     }
 
+    handleDelete() {
+        this.props.onDelete(this.props.itemId)
+    }
+
     render () {
         const checked = this.props.done ? true : false
         return (
             <div className="Item">
-                <span className="Item-checkbox" onClick={() => this.handleClick()}>
-                    <input type="checkbox" checked={checked} />
+                <span className="Item-checkbox">
+                    <input type="checkbox" checked={checked} onChange={() => this.handleDone()} />
                 </span>
                 <input type="text"
                     value={this.props.content}
                     onChange={(event) => this.handleChange(event)}
                     onBlur={() => this.handleBlur()}
                 />
+                <span className="Item-delete" onClick={() => this.handleDelete()}>
+                    &times;
+                </span>
             </div>
         )
     }

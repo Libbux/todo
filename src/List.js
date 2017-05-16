@@ -48,6 +48,12 @@ class List extends Component {
         });
     }
 
+    apiDeleteItem(id) {
+        axios.delete(url + '/items/' + id).then((response) => {
+            console.log(response);
+        });
+    }
+
     handleContentChange(id, content) {
         var newList = this.state.list.slice();
         newList[this.findIndex(id)].content = content;
@@ -80,6 +86,16 @@ class List extends Component {
         this.apiUpdateItem(id, item.done, item.content);
     }
 
+    deleteItem(id) {
+        this.apiDeleteItem(id);
+        var newList = this.state.list.slice();
+        newList.splice(this.findIndex(id), 1);
+
+        this.setState({
+            list: newList,
+        });
+    }
+
     render () {
         var listItems = this.state.list.map((item, index) =>
             <Item
@@ -90,6 +106,7 @@ class List extends Component {
                 onContentChange={(id, content) => this.handleContentChange(id, content)}
                 onDoneChange={(id) => this.handleDoneChange(id)}
                 onBlur={(id) => this.saveItem(id)}
+                onDelete={(id) => this.deleteItem(id)}
             />
         );
 
